@@ -1,16 +1,16 @@
 #include <iostream>
 #include <stack>
 #include <vector>
+#include <queue>
 using namespace std;
 
 #define ElemType int
 
 int Parttion(ElemType A[], int low, int high)
 {
-    ElemType point;
+    ElemType point = A[low];
     while (low < high)
     {
-        point = A[low];
         while (low < high && A[high] > point)
             high--;
         A[low] = A[high];
@@ -18,7 +18,7 @@ int Parttion(ElemType A[], int low, int high)
             low++;
         A[high] = A[low];
     }
-    A[low + 1] = point;
+    A[low] = point;
     return low;
 }
 
@@ -45,15 +45,50 @@ void quickSortByStack(ElemType A[], int low, int high)
             }
         }
     }
+    else
+        return;
+}
+
+void quickSortByQueue(ElemType A[], int low, int high)
+{
+    if (low >= high)
+        return;
+    queue<int> qu;
+    qu.push(low);
+    qu.push(high);
+    while (!qu.empty())
+    {
+        int l = qu.front();
+        qu.pop();
+        int r = qu.front();
+        qu.pop();
+        if (l < r)
+        {
+            int point = Parttion(A, l, r);
+            qu.push(l);
+            qu.push(point - 1);
+            qu.push(point + 1);
+            qu.push(r);
+        }
+    }
 }
 
 int main()
 {
-    int arr[] = {13, 65, 97, 76, 38, 27, 49};
-    quickSortByStack(arr, 0, 6);
+    int arr1[] = {65, 97, 76, 38, 27, 49, 34};
+    quickSortByStack(arr1, 0, 6);
+    cout << "quickByStack:";
     for (int i = 0; i < 7; i++)
     {
-        cout << arr[i] << "  " << endl;
+        cout << arr1[i] << "  " << endl;
+    }
+
+    int arr2[] = {65, 25, 76, 38, 27, 49, 34};
+    quickSortByQueue(arr2, 0, 6);
+    cout << "quickByQueue:";
+    for (int i = 0; i < 7; i++)
+    {
+        cout << arr2[i] << "  " << endl;
     }
     return 0;
 }

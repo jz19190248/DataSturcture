@@ -3,7 +3,7 @@ void BubbleSort(ElemType A[], int n)
     for (int i = 0; i < n; i++)
     {
         flag = false;
-        for (int j = i - 1; j > 1; j--)
+        for (int j = n - 1; j > i; j--)
         {
             if (A[j - 1] > A[j])
             {
