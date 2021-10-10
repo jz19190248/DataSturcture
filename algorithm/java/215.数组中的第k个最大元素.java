@@ -99,11 +99,37 @@ class Solution {
         return minHeap.peek();
     }
 
+    // =========================================================
+    public int fun5_midSearch(int[] nums, int k) {
+        int l = (int) -1E+4, r = (int) 1E+4;
+        while (l < r - 1) {
+            int mid = l + (r - l) / 2;
+            int greaterEq = countGreaterEq(nums, mid);
+            if (greaterEq >= k) {
+                l = mid;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return countGreaterEq(nums, r) >= k ? r : l;
+    }
+
+    private int countGreaterEq(int nums[], int tar) {
+        int cnt = 0;
+        for (int i : nums) {
+            if (i >= tar) {
+                ++cnt;
+            }
+        }
+        return cnt;
+    }
+
     public int findKthLargest(int[] nums, int k) {
         // return fun1_myselfBubbleSort(nums, k);
         // return fun2_sort(nums, k);
         // return fun3_Parttion(nums, k);
-        return fun4_Priority(nums, k);
+        // return fun4_Priority(nums, k);
+        return fun5_midSearch(nums, k);
     }
 }
 // @lc code=end
