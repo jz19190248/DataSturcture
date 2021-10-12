@@ -2,7 +2,7 @@
 
 [TOC]
 
-![image-20210918185833675](D:\文件\算法\note\1Array.assets\image-20210918185833675.png)
+![image-20210918185833675](1Array.assets\image-20210918185833675.png)
 
 
 
@@ -12,11 +12,11 @@
 
 ### Two Pointers 同向模板
 
-![image-20210918185922127](D:\文件\算法\note\1Array.assets\image-20210918185922127.png)
+![image-20210918185922127](1Array.assets\image-20210918185922127.png)
 
 ### Two Pointers 反向模板
 
-![image-20210918192103193](D:\文件\算法\note\1Array.assets\image-20210918192103193.png)
+![image-20210918192103193](1Array.assets\image-20210918192103193.png)
 
 ## 例题
 
@@ -395,7 +395,7 @@
 >
 >**示例 1：**
 >
->![img](D:\文件\算法\note\1Array.assets\e1-1.png)
+>![img](1Array.assets\e1-1.png)
 >
 >```
 >输入：grid = [[1,2,3],[4,5,6],[7,8,9]], k = 1
@@ -404,7 +404,7 @@
 >
 >**示例 2：**
 >
->![img](D:\文件\算法\note\1Array.assets\e2-1.png)
+>![img](1Array.assets\e2-1.png)
 >
 >```
 >输入：grid = [[3,8,1,9],[19,7,2,5],[4,6,11,10],[12,0,21,13]], k = 4
@@ -584,7 +584,7 @@
 >
 >
 >
->![img](D:\文件\算法\note\1Array.assets\hint_valid_mountain_array.png)
+>![img](1Array.assets\hint_valid_mountain_array.png)
 >
 >
 >
@@ -981,7 +981,7 @@
 >
 >**说明：**你不能倾斜容器。
 >
-> 
+>
 >
 >**示例 1：**
 >
@@ -1014,7 +1014,7 @@
 >输出：2
 >```
 >
-> 
+>
 >
 >**提示：**
 >
@@ -1026,7 +1026,131 @@
 >
 >[Discussion](https://leetcode-cn.com/problems/container-with-most-water/comments/) | [Solution](https://leetcode-cn.com/problems/container-with-most-water/solution/)
 >
->```
+>```java
+>class Solution {
+>    // 这道题双指针编码的时候写起来简单，但是想到双指针，以及双指针移动规则却比较难
+>    public int maxArea(int[] height) {
+>        int low = 0;
+>        int high = height.length - 1;
+>        int area = 0;
+>        while (low < high) {
+>            int minheight = height[low] >= height[high] ? height[high] : height[low];
+>            if (minheight * (high - low) > area)
+>                area = minheight * (high - low);
+>            if (height[low] < height[high]) {
+>                low++;
+>            } else {
+>                high--;
+>            }
+>        }
+>        return area;
 >
+>    }
+>}
 >```
 
+#### 31.下一个排列
+
+> # [下一个排列](https://leetcode-cn.com/problems/next-permutation/description/)
+>
+> |  Category  |   Difficulty    | Likes | Dislikes |
+> | :--------: | :-------------: | :---: | :------: |
+> | algorithms | Medium (37.31%) | 1363  |    -     |
+>
+> <details style="color: rgb(212, 212, 212); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, system-ui, Ubuntu, &quot;Droid Sans&quot;, sans-serif, &quot;Microsoft Yahei UI&quot;; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary><strong>Tags</strong></summary></details>
+>
+> <details style="color: rgb(212, 212, 212); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, system-ui, Ubuntu, &quot;Droid Sans&quot;, sans-serif, &quot;Microsoft Yahei UI&quot;; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary><strong>Companies</strong></summary></details>
+>
+> 实现获取 **下一个排列** 的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列（即，组合出下一个更大的整数）。
+>
+> 如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。
+>
+> 必须**[ 原地 ](https://baike.baidu.com/item/原地算法)**修改，只允许使用额外常数空间。
+>
+>  
+>
+> **示例 1：**
+>
+> ```
+> 输入：nums = [1,2,3]
+> 输出：[1,3,2]
+> ```
+>
+> **示例 2：**
+>
+> ```
+> 输入：nums = [3,2,1]
+> 输出：[1,2,3]
+> ```
+>
+> **示例 3：**
+>
+> ```
+> 输入：nums = [1,1,5]
+> 输出：[1,5,1]
+> ```
+>
+> **示例 4：**
+>
+> ```
+> 输入：nums = [1]
+> 输出：[1]
+> ```
+>
+>  
+>
+> **提示：**
+>
+> - `1 <= nums.length <= 100`
+> - `0 <= nums[i] <= 100`
+>
+> ------
+>
+> [Discussion](https://leetcode-cn.com/problems/next-permutation/comments/) | [Solution](https://leetcode-cn.com/problems/next-permutation/solution/)
+>
+> ```java
+> class Solution {
+>     public void nextPermutation(int[] nums) {
+>         int i = nums.length - 2;
+>         while (i >= 0 && nums[i] >= nums[i + 1]) {
+>             i--;
+>         }
+>         if (i >= 0) {
+>             int j = nums.length - 1;
+>             while (j >= 0 && nums[j] <= nums[i]) {
+>                 j--;
+>             }
+>              //swap(nums[i], nums[j]);
+>             swap(nums, i, j);
+>         }
+>         reverse(nums, i + 1);
+>     }
+> 
+> 
+> 
+>     public void swap(int[] nums, int a, int b) {
+>         int temp = nums[a];
+>         nums[a] = nums[b];
+>         nums[b] = temp;
+>     }
+> 
+>     public void reverse(int[] nums, int start) {
+>         int i = start;
+>         int j = nums.length - 1;
+>         while (i < j) {
+>             //swap(nums[i], nums[j]);
+>             swap(nums, i, j);
+>             i++;
+>             j--;
+>         }
+>     }
+> }
+> ```
+>
+> **注意：java中参数传递：基本类型是值传递，副本传递，引用类型是引用传递**
+>
+> >  注意到下一个排列总是比当前排列要大，除非该排列已经是最大的排列。我们希望找到一种方法，能够找到一个大于当前序列的新序列，且变大的幅度尽可能小。
+> >
+> > 具体地：我们需要将一个左边的「较小数」与一个右边的「较大数」交换，以能够让当前排列变大，从而得到下一个排列。
+> >
+> > 同时我们要让这个「较小数」尽量靠右，而「较大数」尽可能小。当交换完成后，「较大数」右边的数需要按照升序重新排列。这样可以在保证新排列大于原来排列的情况下，使变大的幅度尽可能小。
