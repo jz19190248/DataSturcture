@@ -1154,3 +1154,234 @@
 > > 具体地：我们需要将一个左边的「较小数」与一个右边的「较大数」交换，以能够让当前排列变大，从而得到下一个排列。
 > >
 > > 同时我们要让这个「较小数」尽量靠右，而「较大数」尽可能小。当交换完成后，「较大数」右边的数需要按照升序重新排列。这样可以在保证新排列大于原来排列的情况下，使变大的幅度尽可能小。
+
+#### 48.旋转图像
+
+># [旋转图像](https://leetcode-cn.com/problems/rotate-image/description/)
+>
+>|  Category  |   Difficulty    | Likes | Dislikes |
+>| :--------: | :-------------: | :---: | :------: |
+>| algorithms | Medium (73.52%) | 1026  |    -     |
+>
+><details style="color: rgb(212, 212, 212); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, system-ui, Ubuntu, &quot;Droid Sans&quot;, sans-serif, &quot;Microsoft Yahei UI&quot;; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary><strong>Tags</strong></summary></details>
+>
+><details style="color: rgb(212, 212, 212); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, system-ui, Ubuntu, &quot;Droid Sans&quot;, sans-serif, &quot;Microsoft Yahei UI&quot;; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary><strong>Companies</strong></summary></details>
+>
+>给定一个 *n* × *n* 的二维矩阵 `matrix` 表示一个图像。请你将图像顺时针旋转 90 度。
+>
+>你必须在**[ 原地](https://baike.baidu.com/item/原地算法)** 旋转图像，这意味着你需要直接修改输入的二维矩阵。**请不要** 使用另一个矩阵来旋转图像。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](1Array.assets/mat1.jpg)
+>
+>```
+>输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+>输出：[[7,4,1],[8,5,2],[9,6,3]]
+>```
+>
+>**示例 2：**
+>
+>![img](1Array.assets/mat2.jpg)
+>
+>```
+>输入：matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
+>输出：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：matrix = [[1]]
+>输出：[[1]]
+>```
+>
+>**示例 4：**
+>
+>```
+>输入：matrix = [[1,2],[3,4]]
+>输出：[[3,1],[4,2]]
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `matrix.length == n`
+>- `matrix[i].length == n`
+>- `1 <= n <= 20`
+>- `-1000 <= matrix[i][j] <= 1000`
+>
+>------
+>
+>[Discussion](https://leetcode-cn.com/problems/rotate-image/comments/) | [Solution](https://leetcode-cn.com/problems/rotate-image/solution/)
+>
+>```java
+>/*
+> * @lc app=leetcode.cn id=48 lang=java
+> *
+> * [48] 旋转图像
+> */
+>
+>// @lc code=start
+>class Solution {
+>
+>    public void rotate(int[][] matrix) {
+>        // 方法1：规律发现第i行的第j个位置，旋转以后
+>        // 会到倒数第i列的第j个位置
+>        // 借助辅助数组进行操作
+>        // 空间为n^2，时间为n^2
+>        int row = matrix.length;
+>        int col = matrix[0].length;
+>        // int[][] tempMatrix = new int[matrix.length][matrix[0].length];
+>        // for (int i = 0; i < row; i++) {
+>        // for (int j = 0; j < col; j++) {
+>        // tempMatrix[j][col - i - 1] = matrix[i][j];
+>        // }
+>        // }
+>        // for (int i = 0; i < row; i++) {
+>        // for (int j = 0; j < col; j++) {
+>        // matrix[i][j] = tempMatrix[i][j];
+>        // }
+>        // }
+>
+>        // 方法二，首先水平翻转、而后沿对角线翻转，
+>        // 对二维矩阵的处理中，方法是带入row、col等未知数
+>        // 而后进对未知数进行计算。
+>        // 熟悉各种矩阵操作中的角标变化
+>
+>        // 水平翻转 !!!!!只需要翻转1/2
+>        int temp = 0;
+>        for (int i = 0; i < row / 2; i++) {
+>            for (int j = 0; j < col; j++) {
+>                temp = matrix[i][j];
+>                matrix[i][j] = matrix[row - i - 1][j];
+>                matrix[row - i - 1][j] = temp;
+>            }
+>        }
+>        // 对角线翻转
+>
+>        for (int i = 0; i < row; i++) {
+>            for (int j = i; j < col; j++) {
+>                temp = matrix[i][j];
+>                matrix[i][j] = matrix[j][i];
+>                matrix[j][i] = temp;
+>            }
+>        }
+>
+>    }
+>}
+>// @lc code=end
+>
+>```
+
+75.颜色分类(荷兰国旗)
+
+> # [颜色分类](https://leetcode-cn.com/problems/sort-colors/description/)
+>
+> |  Category  |   Difficulty    | Likes | Dislikes |
+> | :--------: | :-------------: | :---: | :------: |
+> | algorithms | Medium (59.59%) | 1038  |    -     |
+>
+> <details open="" style="color: rgb(212, 212, 212); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, system-ui, Ubuntu, &quot;Droid Sans&quot;, sans-serif, &quot;Microsoft Yahei UI&quot;; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary><strong>Tags</strong></summary><p style="margin-top: 0px; margin-bottom: 0.7em;"><a href="https://leetcode.com/tag/array" title="https://leetcode.com/tag/array" style="color: var(--vscode-textLink-foreground); text-decoration: none;"><code style="color: var(--vscode-textLink-foreground); font-family: var(--vscode-editor-font-family, &quot;SF Mono&quot;, Monaco, Menlo, Consolas, &quot;Ubuntu Mono&quot;, &quot;Liberation Mono&quot;, &quot;DejaVu Sans Mono&quot;, &quot;Courier New&quot;, monospace); font-size: 1em; line-height: 1.357em; white-space: pre-wrap;">array</code></a><span>&nbsp;</span>|<span>&nbsp;</span><a href="https://leetcode.com/tag/two-pointers" title="https://leetcode.com/tag/two-pointers" style="color: var(--vscode-textLink-foreground); text-decoration: none;"><code style="color: var(--vscode-textLink-foreground); font-family: var(--vscode-editor-font-family, &quot;SF Mono&quot;, Monaco, Menlo, Consolas, &quot;Ubuntu Mono&quot;, &quot;Liberation Mono&quot;, &quot;DejaVu Sans Mono&quot;, &quot;Courier New&quot;, monospace); font-size: 1em; line-height: 1.357em; white-space: pre-wrap;">two-pointers</code></a><span>&nbsp;</span>|<span>&nbsp;</span><a href="https://leetcode.com/tag/sort" title="https://leetcode.com/tag/sort" style="color: var(--vscode-textLink-foreground); text-decoration: none;"><code style="color: var(--vscode-textLink-foreground); font-family: var(--vscode-editor-font-family, &quot;SF Mono&quot;, Monaco, Menlo, Consolas, &quot;Ubuntu Mono&quot;, &quot;Liberation Mono&quot;, &quot;DejaVu Sans Mono&quot;, &quot;Courier New&quot;, monospace); font-size: 1em; line-height: 1.357em; white-space: pre-wrap;">sort</code></a></p></details>
+>
+> <details style="color: rgb(212, 212, 212); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, system-ui, Ubuntu, &quot;Droid Sans&quot;, sans-serif, &quot;Microsoft Yahei UI&quot;; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary><strong>Companies</strong></summary></details>
+>
+> 给定一个包含红色、白色和蓝色，一共 `n` 个元素的数组，**[原地](https://baike.baidu.com/item/原地算法)**对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
+>
+> 此题中，我们使用整数 `0`、 `1` 和 `2` 分别表示红色、白色和蓝色。
+>
+> 
+>
+>  
+>
+> **示例 1：**
+>
+> ```
+> 输入：nums = [2,0,2,1,1,0]
+> 输出：[0,0,1,1,2,2]
+> ```
+>
+> **示例 2：**
+>
+> ```
+> 输入：nums = [2,0,1]
+> 输出：[0,1,2]
+> ```
+>
+> **示例 3：**
+>
+> ```
+> 输入：nums = [0]
+> 输出：[0]
+> ```
+>
+> **示例 4：**
+>
+> ```
+> 输入：nums = [1]
+> 输出：[1]
+> ```
+>
+>  
+>
+> **提示：**
+>
+> - `n == nums.length`
+> - `1 <= n <= 300`
+> - `nums[i]` 为 `0`、`1` 或 `2`
+>
+>  
+>
+> **进阶：**
+>
+> - 你可以不使用代码库中的排序函数来解决这道题吗？
+> - 你能想出一个仅使用常数空间的一趟扫描算法吗？
+>
+> ------
+>
+> [Discussion](https://leetcode-cn.com/problems/sort-colors/comments/) | [Solution](https://leetcode-cn.com/problems/sort-colors/solution/)
+>
+> ```java
+> /*
+>  * @lc app=leetcode.cn id=75 lang=java
+>  *
+>  * [75] 颜色分类
+>  */
+> 
+> // @lc code=start
+> class Solution {
+>     public void sortColors(int[] nums) {
+>         // 这是数据结构考研题目荷兰国旗改编
+>         int temp = 0;
+>         int i = 0, j = 0, k = nums.length - 1;
+>         for (j = i; j <= k;) {
+>             if (nums[j] == 0) {
+>                 temp = nums[j];
+>                 nums[j] = nums[i];
+>                 nums[i] = temp;
+>                 i++;
+>                 j++;
+>             } else if (nums[j] == 2) {
+>                 temp = nums[j];
+>                 nums[j] = nums[k];
+>                 nums[k] = temp;
+>                 k--;
+>             } else {
+>                 j++;
+>             }
+>         }
+>     }
+> }
+> // @lc code=end
+> 
+> ```
+
+## TODO 
+
+57.插入区间/56合并区间
+
+42.接雨水
+
